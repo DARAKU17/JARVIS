@@ -8,7 +8,7 @@ from playsound import playsound
 # -------------------------------
 # Configuration
 # -------------------------------
-MODEL_PATH = "/models/xtts_v2"
+MODEL_PATH = "tts_models/multilingual/multi-dataset/xtts_v2"
 MODEL_SPEAKER = "Tanja Adelina"   # Your recorded voice sample
 MODEL_NAME = "FRIDAY"
 DEFAULT_LANGUAGE = "en"
