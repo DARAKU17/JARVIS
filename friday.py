@@ -9,7 +9,7 @@ import simpleaudio as sa   # ✅ safer replacement for playsound
 # Configuration
 # -------------------------------
 MODEL_PATH = "tts_models/multilingual/multi-dataset/xtts_v2"
-MODEL_SPEAKER = "Tanja Adelina"   # Voice preset / speaker name
+MODEL_SPEAKER = "Daisy Studious"   # Voice preset / speaker name
 MODEL_NAME = "FRIDAY"
 DEFAULT_LANGUAGE = "en"
 
@@ -25,18 +25,18 @@ def model_speak(text):
     try:
         os.makedirs("./history", exist_ok=True)  # ✅ ensure folder exists
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        filename = f"{MODEL_NAME}_{timestamp}.wav"
+        filename = f"{MODEL_NAME}_{MODEL_SPEAKER}_{timestamp}.wav"
         file_path = f"./history/{filename}"
 
         tts.tts_to_file(
             text=text,
-            file_path=file_path,
+            file_path=f"./history/{filename}",
             language=LANGUAGE,
             speaker_id=MODEL_SPEAKER
         )
 
         print(f"{MODEL_NAME} ({LANGUAGE}): {text} | Saved as {filename}")
-        play_audio(file_path)
+        play_audio(f"./history/{filename}")
 
     except Exception as e:
         print(f"[Error] Could not generate TTS: {e}")
