@@ -3,13 +3,13 @@ from TTS.api import TTS
 import os
 import time
 from datetime import datetime
-from playsound import playsound
+import simpleaudio as sa   # ✅ safer replacement for playsound
 
 # -------------------------------
 # Configuration
 # -------------------------------
 MODEL_PATH = "tts_models/multilingual/multi-dataset/xtts_v2"
-MODEL_SPEAKER = "Tanja Adelina"   # Your recorded voice sample
+MODEL_SPEAKER = "Tanja Adelina"   # Voice preset / speaker name
 MODEL_NAME = "FRIDAY"
 DEFAULT_LANGUAGE = "en"
 
@@ -23,26 +23,30 @@ LANGUAGE = DEFAULT_LANGUAGE
 def model_speak(text):
     """Generate TTS using reference voice and play audio."""
     try:
+        os.makedirs("./history", exist_ok=True)  # ✅ ensure folder exists
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         filename = f"{MODEL_NAME}_{timestamp}.wav"
+        file_path = f"./history/{filename}"
 
         tts.tts_to_file(
             text=text,
-            file_path=f"./history/{filename}",
+            file_path=file_path,
             language=LANGUAGE,
-            speaker_id=MODEL_SPEAKER  # reference sample
+            speaker_id=MODEL_SPEAKER
         )
 
         print(f"{MODEL_NAME} ({LANGUAGE}): {text} | Saved as {filename}")
-        play_audio(f"./history/{filename}")
+        play_audio(file_path)
 
     except Exception as e:
         print(f"[Error] Could not generate TTS: {e}")
 
 def play_audio(file_path):
-    """Play audio directly in Python using playsound."""
+    """Play audio using simpleaudio (cross-platform)."""
     try:
-        playsound(file_path)
+        wave_obj = sa.WaveObject.from_wave_file(file_path)
+        play_obj = wave_obj.play()
+        play_obj.wait_done()  # ✅ block until playback finishes
     except Exception as e:
         print(f"[Error] Could not play audio: {e}")
 
